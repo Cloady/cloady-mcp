@@ -1,0 +1,3565 @@
+{
+  "identifier": "cloady-mcp",
+  "name": "Cloady",
+  "version": "0.5.1",
+  "description": "Deploy and manage cloud apps, workspaces, deployments, environment variables, domains, volumes, and logs on Cloady.",
+  "homepage": "https://cloady.com",
+  "tools": [
+    {
+      "name": "getMe",
+      "title": "Get Me",
+      "description": "Get the authenticated user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listRegions",
+      "title": "List Regions",
+      "description": "List available regions",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaces",
+      "title": "List Workspaces",
+      "description": "List workspaces for the authenticated user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createWorkspace",
+      "title": "Create Workspace",
+      "description": "Create a workspace (requires full scope)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "slug": {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "hues": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMaximum": 360
+                  },
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMaximum": 360
+                  }
+                ]
+              },
+              "tier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "iconUrl": {
+                "type": "string",
+                "maxLength": 8000000
+              },
+              "paymentMethodId": {
+                "type": "string",
+                "maxLength": 255,
+                "pattern": "^pm_"
+              }
+            },
+            "required": [
+              "name",
+              "slug",
+              "hues",
+              "tier"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getWorkspace",
+      "title": "Get Workspace",
+      "description": "Get a workspace by slug",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "deleteWorkspace",
+      "title": "Delete Workspace",
+      "description": "Delete a workspace (requires full scope)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateWorkspace",
+      "title": "Update Workspace",
+      "description": "Update a workspace (requires full scope)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "slug": {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "hues": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMaximum": 360
+                  },
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMaximum": 360
+                  }
+                ]
+              },
+              "iconUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 8000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "paymentMethodId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 255,
+                    "pattern": "^pm_"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "inspectSource",
+      "title": "Inspect Source",
+      "description": "Inspect a source and preview its template",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "git"
+                      },
+                      "repoUrl": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                      },
+                      "branch": {
+                        "type": "string",
+                        "maxLength": 255
+                      },
+                      "subdir": {
+                        "type": "string",
+                        "maxLength": 255
+                      },
+                      "autoDeploy": {
+                        "type": "boolean"
+                      },
+                      "branchTracking": {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "off",
+                              "all",
+                              "match"
+                            ]
+                          },
+                          "pattern": {
+                            "type": "string",
+                            "maxLength": 255
+                          }
+                        },
+                        "required": [
+                          "mode"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "repoUrl"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "upload"
+                      },
+                      "uploadId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "subdir": {
+                        "type": "string",
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "catalog"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "name"
+                    ]
+                  }
+                ],
+                "type": "object"
+              },
+              "env": {
+                "type": "string",
+                "enum": [
+                  "production",
+                  "preview",
+                  "development"
+                ]
+              }
+            },
+            "required": [
+              "source"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "deployApp",
+      "title": "Deploy App",
+      "description": "Deploy an app from a git repository or upload",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "region": {
+                "type": "string",
+                "minLength": 1
+              },
+              "env": {
+                "type": "string",
+                "enum": [
+                  "production",
+                  "preview",
+                  "development"
+                ]
+              },
+              "source": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "git"
+                      },
+                      "repoUrl": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                      },
+                      "branch": {
+                        "type": "string",
+                        "maxLength": 255
+                      },
+                      "subdir": {
+                        "type": "string",
+                        "maxLength": 255
+                      },
+                      "autoDeploy": {
+                        "type": "boolean"
+                      },
+                      "branchTracking": {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "off",
+                              "all",
+                              "match"
+                            ]
+                          },
+                          "pattern": {
+                            "type": "string",
+                            "maxLength": 255
+                          }
+                        },
+                        "required": [
+                          "mode"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "repoUrl"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "upload"
+                      },
+                      "uploadId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "subdir": {
+                        "type": "string",
+                        "maxLength": 255
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "catalog"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 80
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "name"
+                    ]
+                  }
+                ],
+                "type": "object"
+              },
+              "port": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 65535
+              },
+              "values": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              "buildCmd": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "startCmd": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "autoDeploy": {
+                "type": "boolean"
+              },
+              "scale": {
+                "type": "object",
+                "properties": {
+                  "cpu": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 4,
+                    "multipleOf": 0.25
+                  },
+                  "memory": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 4,
+                    "multipleOf": 0.25
+                  },
+                  "volumes": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 30
+                    },
+                    "additionalProperties": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4096
+                    }
+                  }
+                },
+                "required": [
+                  "cpu",
+                  "memory"
+                ]
+              }
+            },
+            "required": [
+              "region",
+              "source"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "deleteApp",
+      "title": "Delete App",
+      "description": "Delete an app and purge its data",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateApp",
+      "title": "Update App",
+      "description": "Update an app (name / status / version)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "slug": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 24,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "running",
+                  "degraded",
+                  "stopped",
+                  "error"
+                ]
+              },
+              "branch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255
+              },
+              "tracking": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "off",
+                      "all",
+                      "match"
+                    ]
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "maxLength": 255
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              },
+              "autoDeploy": {
+                "type": "boolean"
+              },
+              "scale": {
+                "type": "object",
+                "properties": {
+                  "cpu": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 4,
+                    "multipleOf": 0.25
+                  },
+                  "memory": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 4,
+                    "multipleOf": 0.25
+                  },
+                  "volumes": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 30
+                    },
+                    "additionalProperties": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 4096
+                    }
+                  }
+                },
+                "required": [
+                  "cpu",
+                  "memory"
+                ]
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "redeployApp",
+      "title": "Redeploy App",
+      "description": "Redeploy an app (refresh code + roll pods)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createSshSession",
+      "title": "Create Ssh Session",
+      "description": "Create a short-lived SSH session credential for a running container",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "component": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "component"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "execCommand",
+      "title": "Exec Command",
+      "description": "Run a one-off shell command in a running container (kubernetes exec)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "component": {
+                "type": "string",
+                "minLength": 1
+              },
+              "command": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100000
+              },
+              "cwd": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "stdin": {
+                "type": "string",
+                "maxLength": 1048576
+              },
+              "timeoutMs": {
+                "type": "number",
+                "minimum": 1000,
+                "maximum": 300000
+              }
+            },
+            "required": [
+              "component",
+              "command"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listBackups",
+      "title": "List Backups",
+      "description": "List an app's backups and its backup settings",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateBackups",
+      "title": "Update Backups",
+      "description": "Turn managed backups on or off and set the daily window",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "window": {
+                "type": "string",
+                "enum": [
+                  "12",
+                  "16",
+                  "20",
+                  "auto",
+                  "00",
+                  "04",
+                  "08"
+                ]
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "restoreBackup",
+      "title": "Restore Backup",
+      "description": "Overwrites the app's current volume contents with the snapshot. There is no undo.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "backupId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "backupId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listBranches",
+      "title": "List Branches",
+      "description": "Fetched live from GitHub; empty for apps whose source is not git. `current` is the branch the app deploys from.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "rollbackDeploy",
+      "title": "Rollback Deploy",
+      "description": "Needs a running, build-backed app whose target image is still in the registry. Restarts every service in the instance, database included.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "deployId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "deployId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getVolumeKeys",
+      "title": "Get Volume Keys",
+      "description": "Credentials are derived, not stored, so they are stable for the volume and need no rotation step. `volume` is a name from listVolumes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "volume": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "volume"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getDbCredentials",
+      "title": "Get Db Credentials",
+      "description": "Read from the running pod's resolved environment at call time, so the container is the source of truth rather than the template. `component` is a compose service running a database.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "component": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "component"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getDbSchema",
+      "title": "Get Db Schema",
+      "description": "List a database component's schemas and tables",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "component": {
+            "type": "string"
+          },
+          "schema": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "component"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "runDbQuery",
+      "title": "Run Db Query",
+      "description": "Runs over a real protocol driver, not a shell, and executes whatever is sent — including writes and DDL. Redis and MongoDB take their own command syntax rather than SQL.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "component": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sql": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100000
+              },
+              "schema": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "component",
+              "sql"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getGitOverview",
+      "title": "Get Git Overview",
+      "description": "Reads the repository inside the running container by pod exec, so it is ground truth rather than the deploy record. Returns `{ok:false, reason}` when the app has no repo, no pod, or no git.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "runGitAction",
+      "title": "Run Git Action",
+      "description": "One action per call: discard, stage, unstage, commit, checkout, merge, rebase, revert, cherry, pull or push. Commits live in the container and die with it unless pushed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "discard"
+                  },
+                  "paths": {
+                    "minItems": 1,
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "action",
+                  "paths"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "commit"
+                  },
+                  "message": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  },
+                  "paths": {
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "action",
+                  "message"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "checkout"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "create": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "action",
+                  "branch"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "stage"
+                  },
+                  "paths": {
+                    "minItems": 1,
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "action",
+                  "paths"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "unstage"
+                  },
+                  "paths": {
+                    "minItems": 1,
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "action",
+                  "paths"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "merge"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  }
+                },
+                "required": [
+                  "action",
+                  "branch"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "rebase"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                  }
+                },
+                "required": [
+                  "action",
+                  "branch"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "revert"
+                  },
+                  "sha": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 40
+                  }
+                },
+                "required": [
+                  "action",
+                  "sha"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "cherry"
+                  },
+                  "sha": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 40
+                  }
+                },
+                "required": [
+                  "action",
+                  "sha"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "pull"
+                  }
+                },
+                "required": [
+                  "action"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "push"
+                  }
+                },
+                "required": [
+                  "action"
+                ]
+              }
+            ],
+            "type": "object",
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getGitDiff",
+      "title": "Get Git Diff",
+      "description": "With no `sha`, diffs the working tree. `path` narrows it to one file. Large patches come back with `truncated: true`.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "sha": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "streamAppStatus",
+      "title": "Stream App Status",
+      "description": "Returns one status frame. Sending `Accept: text/event-stream` instead follows the status live, a frame every five seconds, which never completes on its own.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "streamAppMetrics",
+      "title": "Stream App Metrics",
+      "description": "Returns one metrics reading; `network` and `requestsPerSec` are null until a second sample exists, so they are null on a one-shot read. Sending `Accept: text/event-stream` instead follows usage live, a frame every five seconds, which never completes on its own.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "streamActiveDeploy",
+      "title": "Stream Active Deploy",
+      "description": "Returns one `{ts, deploy}` frame: the active deploy if one is running, otherwise the most recent, and `deploy` is null when the app has never deployed. Sending `Accept: text/event-stream` instead follows it live, a frame every two seconds, closing after one terminal frame.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "streamDeployLogs",
+      "title": "Stream Deploy Logs",
+      "description": "Returns one `{kind:\"snapshot\", log, status}` frame — the whole log so far, not a delta: the stored log for a finished deploy, the live build pod's log for the in-flight one. Sending `Accept: text/event-stream` instead re-sends a growing snapshot every two seconds; a finished deploy sends one frame and closes, the in-flight one keeps the connection open after it ends, so close it yourself once a frame carries `final: true`.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "deployId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "deployId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listDeploys",
+      "title": "List Deploys",
+      "description": "List an app's deploys",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listVars",
+      "title": "List Vars",
+      "description": "List environment variables and credentials for an app",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createVar",
+      "title": "Create Var",
+      "description": "Create a new environment variable or credential",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^[A-Z_][A-Z0-9_]*$"
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "isSecret": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "importVars",
+      "title": "Import Vars",
+      "description": "Bulk-create environment variables, skipping keys already set",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "minItems": 1,
+                "maxItems": 500,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "value": {
+                      "type": "string",
+                      "maxLength": 4096
+                    },
+                    "isSecret": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "value"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "entries"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "deleteVar",
+      "title": "Delete Var",
+      "description": "Delete an environment variable or credential",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "varId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "varId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateVar",
+      "title": "Update Var",
+      "description": "Update an environment variable or credential value",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "varId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "isSecret": {
+                "type": "boolean"
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "varId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "revealVar",
+      "title": "Reveal Var",
+      "description": "Reveal the decrypted value of a secret variable",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "varId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "varId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listAppDomains",
+      "title": "List App Domains",
+      "description": "List all domains for an app in a workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createDomain",
+      "title": "Create Domain",
+      "description": "Create a new domain for an app",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string",
+                "pattern": "^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$"
+              },
+              "isPrimary": {
+                "type": "boolean"
+              },
+              "redirectTo": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "port": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 65535
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "host"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "deleteDomain",
+      "title": "Delete Domain",
+      "description": "Delete a domain from an app",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "domainId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "domainId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateDomain",
+      "title": "Update Domain",
+      "description": "Update a domain configuration",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "domainId": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "redirectTo": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "domainId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listCertStatuses",
+      "title": "List Cert Statuses",
+      "description": "List TLS certificate statuses for app domains",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "readServiceLogs",
+      "title": "Read Service Logs",
+      "description": "Returns the last 200 log lines of one container as `{container, state, logs}`; `state` is `no-pod` when nothing is running. `serviceName` is a compose service, or `clone` / `build` for an in-flight deploy's init steps. Sending `Accept: text/event-stream` instead follows the log live as server-sent events, one bare `data:` frame per line, which never completes on its own.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug",
+          "serviceName"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getAppServices",
+      "title": "Get App Services",
+      "description": "List all services in an app instance",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createAppDeploy",
+      "title": "Create App Deploy",
+      "description": "Trigger a new deployment for an app",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "commitMsg": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "sha": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "author": {
+                "type": "string",
+                "maxLength": 80
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listVolumes",
+      "title": "List Volumes",
+      "description": "List volumes for an app instance",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "transferApp",
+      "title": "Transfer App",
+      "description": "Transfer an app to another workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "appSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "targetWorkspaceSlug": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              }
+            },
+            "required": [
+              "targetWorkspaceSlug"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "appSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createS3Session",
+      "title": "Create S3Session",
+      "description": "The credentials are derived and expire on their own; `access: \"write\"` needs the developer role. Buckets are named `<instance id without dashes>-<volume>`.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "access": {
+                "default": "read",
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "endS3Session",
+      "title": "End S3Session",
+      "description": "End the caller's S3 session",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getWorkspaceBilling",
+      "title": "Get Workspace Billing",
+      "description": "Get workspace billing info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "changeBillingPlan",
+      "title": "Change Billing Plan",
+      "description": "Change workspace billing tier",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "tier": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "tier"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaceMembers",
+      "title": "List Workspace Members",
+      "description": "List workspace members",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaceInvitations",
+      "title": "List Workspace Invitations",
+      "description": "List pending workspace invitations",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createWorkspaceInvitation",
+      "title": "Create Workspace Invitation",
+      "description": "Send workspace invitation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "owner",
+                  "admin",
+                  "developer",
+                  "viewer"
+                ]
+              }
+            },
+            "required": [
+              "email"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "revokeWorkspaceInvitation",
+      "title": "Revoke Workspace Invitation",
+      "description": "Revoke workspace invitation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "invitationId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug",
+          "invitationId"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "transferWorkspaceOwnership",
+      "title": "Transfer Workspace Ownership",
+      "description": "Transfer workspace ownership",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "targetUserId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              }
+            },
+            "required": [
+              "targetUserId"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaceDomains",
+      "title": "List Workspace Domains",
+      "description": "List all domains in workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaceVolumes",
+      "title": "List Workspace Volumes",
+      "description": "List storage volumes in workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string",
+            "enum": [
+              "production",
+              "preview",
+              "development"
+            ]
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listWorkspaceIntegrations",
+      "title": "List Workspace Integrations",
+      "description": "List workspace integrations and provider status",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "linkGithubIntegration",
+      "title": "Link Github Integration",
+      "description": "Link GitHub installation to workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "installationId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              }
+            },
+            "required": [
+              "installationId"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "disconnectGithubIntegration",
+      "title": "Disconnect Github Integration",
+      "description": "Disconnect GitHub integration from workspace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listGithubRepos",
+      "title": "List Github Repos",
+      "description": "Search GitHub repositories",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workspaceSlug": {
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "installationId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceSlug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listTokens",
+      "title": "List Tokens",
+      "description": "List the authenticated user's API tokens",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createToken",
+      "title": "Create Token",
+      "description": "Create a new API token for the current user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "full",
+                  "deploy",
+                  "read"
+                ],
+                "default": "full"
+              },
+              "expires": {
+                "default": "never",
+                "type": "string",
+                "enum": [
+                  "never",
+                  "30d",
+                  "90d",
+                  "1y"
+                ]
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "revokeToken",
+      "title": "Revoke Token",
+      "description": "Revoke an API token",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getAccountBilling",
+      "title": "Get Account Billing",
+      "description": "Get account billing information including payment methods and invoices",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "startCardSetup",
+      "title": "Start Card Setup",
+      "description": "Returns a `clientSecret` that Stripe's payment element exchanges for a saved card in the browser. The secret alone cannot charge anything or read existing cards, and it is scoped to the caller's own Stripe customer.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getUserBillingState",
+      "title": "Get User Billing State",
+      "description": "Get user billing state (free availability and payment method status)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getNotificationPreferences",
+      "title": "Get Notification Preferences",
+      "description": "Get notification preferences for the current user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateNotificationPreferences",
+      "title": "Update Notification Preferences",
+      "description": "Update notification preferences for the current user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "deploys": {
+                "type": "boolean"
+              },
+              "incidents": {
+                "type": "boolean"
+              },
+              "billing": {
+                "type": "boolean"
+              },
+              "weekly": {
+                "type": "boolean"
+              },
+              "product": {
+                "type": "boolean"
+              }
+            },
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "checkPassword",
+      "title": "Check Password",
+      "description": "Read the account's sign-in security state",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updatePassword",
+      "title": "Update Password",
+      "description": "Update or set the password for the current user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "currentPassword": {
+                "type": "string"
+              },
+              "newPassword": {
+                "type": "string",
+                "minLength": 12,
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "newPassword"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listTickets",
+      "title": "List Tickets",
+      "description": "List support tickets for the current user",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "createTicket",
+      "title": "Create Ticket",
+      "description": "Create a new support ticket",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "subject": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "topic": {
+                "default": "general",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8000
+              }
+            },
+            "required": [
+              "subject",
+              "body"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getTicket",
+      "title": "Get Ticket",
+      "description": "Get a single support ticket with all messages",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "updateTicket",
+      "title": "Update Ticket",
+      "description": "Update ticket status or mark as read",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "open",
+                  "resolved"
+                ]
+              },
+              "read": {
+                "type": "boolean",
+                "const": true
+              }
+            },
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "addTicketMessage",
+      "title": "Add Ticket Message",
+      "description": "Add a message to a support ticket",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8000
+              }
+            },
+            "required": [
+              "body"
+            ],
+            "description": "The JSON request body."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "verifyPhone",
+      "title": "Verify Phone",
+      "description": "Confirm a phone number with the code that was sent",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "minLength": 7,
+                "maxLength": 20
+              },
+              "code": {
+                "type": "string",
+                "minLength": 6,
+                "maxLength": 6,
+                "pattern": "^\\d{6}$"
+              }
+            },
+            "required": [
+              "phone",
+              "code"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "startPhoneVerification",
+      "title": "Start Phone Verification",
+      "description": "Send a verification code to a phone number",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "minLength": 7,
+                "maxLength": 20
+              }
+            },
+            "required": [
+              "phone"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "setMfa",
+      "title": "Set Mfa",
+      "description": "Enabling it requires a verified phone number.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requestBody": {
+            "type": "object",
+            "properties": {
+              "mfaEnabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "mfaEnabled"
+            ],
+            "description": "The JSON request body."
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "streamTicketMessages",
+      "title": "Stream Ticket Messages",
+      "description": "Returns one frame. Sending `Accept: text/event-stream` instead follows the thread live, every 2.5 seconds, which stops only when the ticket disappears.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "checkWorkspaceSlug",
+      "title": "Check Workspace Slug",
+      "description": "Returns the slug that would actually be used; `suffixed` is true when the requested one was taken and a numeric suffix was added.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listTemplates",
+      "title": "List Templates",
+      "description": "List all available application templates",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "listTiers",
+      "title": "List Tiers",
+      "description": "List all available service tiers",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getPricing",
+      "title": "Get Pricing",
+      "description": "Get public pricing information for all tiers",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "getInvitation",
+      "title": "Get Invitation",
+      "description": "Get invitation details by token",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "acceptInvitation",
+      "title": "Accept Invitation",
+      "description": "Accept a workspace invitation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "declineInvitation",
+      "title": "Decline Invitation",
+      "description": "Decline a workspace invitation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": true
+      }
+    }
+  ],
+  "tags": [
+    "cloud",
+    "deployment",
+    "developer-tools"
+  ]
+}

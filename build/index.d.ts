@@ -6,7 +6,7 @@
  * Server configuration
  */
 export declare const SERVER_NAME = "cloady-mcp";
-export declare const SERVER_VERSION = "0.5.0";
+export declare const SERVER_VERSION = "0.5.1";
 export declare const API_BASE_URL: string;
 /**
  * Type definition for cached OAuth tokens

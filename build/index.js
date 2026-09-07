@@ -15,7 +15,7 @@ import axios from 'axios';
  * Server configuration
  */
 export const SERVER_NAME = "cloady-mcp";
-export const SERVER_VERSION = "0.5.0";
+export const SERVER_VERSION = "0.5.1";
 // Base URL for the API, can be set via environment variable or determined from OpenAPI spec
 export const API_BASE_URL = process.env.API_BASE_URL || "https://cloady.com";
 console.error("API_BASE_URL is set to:", API_BASE_URL);
@@ -1097,8 +1097,15 @@ const securitySchemes = {
 server.setRequestHandler(ListToolsRequestSchema, async () => {
     const toolsForClient = Array.from(toolDefinitionMap.values()).map(def => ({
         name: def.name,
+        title: def.name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, c => c.toUpperCase()),
         description: def.description,
-        inputSchema: def.inputSchema
+        inputSchema: def.inputSchema,
+        annotations: {
+            readOnlyHint: ['GET', 'HEAD', 'OPTIONS'].includes(def.method.toUpperCase()),
+            // Conservatively flag all mutations as potentially destructive.
+            destructiveHint: !['GET', 'HEAD', 'OPTIONS'].includes(def.method.toUpperCase()),
+            openWorldHint: true
+        }
     }));
     return { tools: toolsForClient };
 });

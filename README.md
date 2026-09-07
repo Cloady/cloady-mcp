@@ -47,3 +47,5 @@ This repository contains the source and build already published as `@cloady/mcp@
 ## Privacy Policy
 
 This local server forwards tool arguments to the Cloady API using your configured API token. See [Cloady Privacy Policy](https://cloady.com/privacy) for data handling and contact information. Use the minimum necessary token scope; write tools can change or delete resources.
+
+The 0.5.1 desktop bundle adds tool titles and conservative read/write annotations to the 0.5.0 API implementation. The Cursor configuration continues to use the published npm 0.5.0 release.

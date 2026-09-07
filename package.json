@@ -1,6 +1,6 @@
 {
   "name": "@cloady/mcp",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Local MCP server for Cloady, generated from its OpenAPI contract: every API operation as a tool.",
   "type": "module",
   "main": "build/index.js",

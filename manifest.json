@@ -2,11 +2,12 @@
   "manifest_version": "0.3",
   "name": "cloady",
   "display_name": "Cloady",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Deploy and manage Cloady apps, workspaces, environment variables, domains, volumes, and logs from AI assistants.",
   "author": {
     "name": "NeptoLab",
-    "email": "hello@cloady.com"
+    "email": "hello@cloady.com",
+    "url": "https://github.com/Cloady"
   },
   "homepage": "https://cloady.com",
   "documentation": "https://cloady.com/docs/mcp",
