@@ -1,0 +1,49 @@
+{
+  "manifest_version": "0.3",
+  "name": "cloady",
+  "display_name": "Cloady",
+  "version": "0.5.0",
+  "description": "Deploy and manage Cloady apps, workspaces, environment variables, domains, volumes, and logs from AI assistants.",
+  "author": {
+    "name": "NeptoLab",
+    "email": "hello@cloady.com"
+  },
+  "homepage": "https://cloady.com",
+  "documentation": "https://cloady.com/docs/mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cloady/cloady-mcp.git"
+  },
+  "license": "MIT",
+  "privacy_policies": [
+    "https://cloady.com/privacy"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "build/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/build/index.js"
+      ],
+      "env": {
+        "BEARER_TOKEN_CLOADY": "${user_config.api_token}"
+      }
+    }
+  },
+  "user_config": {
+    "api_token": {
+      "type": "string",
+      "title": "Cloady API token",
+      "description": "Create a scoped token in Cloady Account > API tokens.",
+      "required": true,
+      "sensitive": true
+    }
+  },
+  "compatibility": {
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  },
+  "tools_generated": true
+}

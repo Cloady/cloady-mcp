@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "cloady": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cloady/mcp@0.5.0"
+      ],
+      "env": {
+        "BEARER_TOKEN_CLOADY": "${BEARER_TOKEN_CLOADY}"
+      }
+    }
+  }
+}
