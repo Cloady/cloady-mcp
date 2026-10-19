@@ -6,6 +6,8 @@ Generated from Cloady's OpenAPI contract, so every REST operation is a tool name
 
 ## Setup
 
+For the OAuth-based Claude plugin, see [Cloady for Claude](./plugin). It connects to the hosted MCP endpoint without installing the npm server or copying an API token. The setup below is for the separate local stdio package.
+
 Create an API token in the dashboard under **Account → API tokens**.
 
 ### Claude Code

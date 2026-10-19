@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cloady": {
+      "type": "http",
+      "url": "https://cloady.com/api/mcp"
+    }
+  }
+}
