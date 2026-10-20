@@ -1,0 +1,10 @@
+{
+  "name": "cloady",
+  "version": "1.0.0",
+  "description": "Deploy apps and databases, inspect logs, and manage cloud resources on Cloady from Gemini CLI.",
+  "mcpServers": {
+    "cloady": {
+      "httpUrl": "https://cloady.com/api/mcp"
+    }
+  }
+}

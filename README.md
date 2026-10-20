@@ -6,7 +6,27 @@ Generated from Cloady's OpenAPI contract, so every REST operation is a tool name
 
 ## Setup
 
-For the OAuth-based Claude plugin, see [Cloady for Claude](./plugin). It connects to the hosted MCP endpoint without installing the npm server or copying an API token. The setup below is for the separate local stdio package.
+For the OAuth-based Claude plugin, see [Cloady for Claude](./plugin). It connects to the hosted MCP endpoint without installing the npm server or copying an API token.
+
+### Gemini CLI extension
+
+Install the extension from this repository:
+
+```sh
+gemini extensions install https://github.com/Cloady/cloady-mcp
+```
+
+Open Gemini CLI and run `/mcp auth cloady` to sign in to Cloady through OAuth. Complete any required account verification and choose the narrowest scope for your task: read, deploy, or full. No API key or local npm server is needed for this extension.
+
+Try "List my Cloady workspaces and running apps", "Explain the latest deployment failure from my app's build logs", or "Show available database templates and pricing before creating anything."
+
+The extension sends tool arguments to `https://cloady.com/api/mcp` and returns permitted results to Gemini. These can include account and workspace metadata, application configuration, code, logs, metrics, database content, and support messages, depending on the tools you request. Google handles received results under its own policies; Cloady's handling, retention, and deletion are described in the [Privacy Policy](https://cloady.com/privacy). An account-level connection can cover all workspaces the account belongs to, subject to scope and workspace role. Revoke its token in **Cloady Account → API tokens** to stop future requests. Revocation does not delete hosted data or copies already received by Gemini.
+
+Review the target workspace, app, environment, region, and any charges before authorizing changes. Write tools can change or delete resources. The extension is free; hosted resources follow [Cloady pricing](https://cloady.com). Support and deletion requests: **hello@cloady.com**.
+
+The Gemini extension and Claude plugin are versioned separately from the local npm package.
+
+### Local stdio package
 
 Create an API token in the dashboard under **Account → API tokens**.
 
