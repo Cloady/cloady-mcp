@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.georgii-ivanov/cloady",
+  "title": "Cloady",
+  "description": "Deploy apps and databases, inspect logs, and manage cloud resources on Cloady.",
+  "version": "0.11.0",
+  "websiteUrl": "https://cloady.com",
+  "repository": {
+    "url": "https://github.com/Cloady/cloady-mcp",
+    "source": "github",
+    "id": "1360684013"
+  },
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Cloady/cloady-mcp/main/plugin/assets/logo.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://cloady.com/api/mcp"
+    }
+  ]
+}

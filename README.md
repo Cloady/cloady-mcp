@@ -26,6 +26,16 @@ Review the target workspace, app, environment, region, and any charges before au
 
 The Gemini extension and Claude plugin are versioned separately from the local npm package.
 
+### Qwen Code
+
+Qwen Code supports Gemini CLI extensions and converts their manifest during installation:
+
+```sh
+qwen extensions install https://github.com/Cloady/cloady-mcp
+```
+
+Use Cloady's OAuth connection in your client. The same account permissions, data handling, and hosting charges described above apply. See [Qwen Code's extension documentation](https://qwenlm.github.io/qwen-code-docs/en/users/extension/introduction/).
+
 ### Local stdio package
 
 Create an API token in the dashboard under **Account → API tokens**.
